@@ -4,9 +4,10 @@ dist/
 __pycache__/
 *.pyc
 
-# Secretos (NUNCA subir el .env real)
+# Secretos (NUNCA subir el .env real) — pero SÍ la plantilla
 .env
 .env.*
+!.env.example
 
 # Basura
 .DS_Store
