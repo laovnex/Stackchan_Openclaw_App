@@ -1,4 +1,4 @@
-# 🤖 StackChan + OpenClaw — Robot de mesa con voz
+# StackChan + OpenClaw — Robot de escritorio con voz
 
 **StackChan_Openclaw_App** es un proyecto completo para convertir un robot de escritorio **StackChan** (M5Stack CoreS3) en un asistente de voz inteligente con cerebro **OpenClaw**.
 
@@ -8,33 +8,33 @@ El robot graba tu voz, la envía por WebSocket a tu servidor, y el servidor hace
 
 ---
 
-## ✨ Lo que hace
+## Lo que hace
 
-- 🎙️ **Voz natural en español** — Amazon Polly neural (es-ES), en streaming
-- 🧠 **Cerebro OpenClaw** — conversación real, sesión estable por dispositivo
-- 👤 **Selector de agentes en pantalla** — elige quién te atiende desde el propio robot
-- 🎭 **Avatar animado** — cara, ojos y lip-sync en el display del CoreS3
-- 🔊 **Audio pulido** — soft-clip y de-esser para que la voz suene limpia
-- 🔌 **Wake word** — activación por voz sin tocar nada
+- **Voz natural en español** — Amazon Polly neural (es-ES), en streaming
+- **Cerebro OpenClaw** — conversación real, sesión estable por dispositivo
+- **Selector de agentes en pantalla** — elige quién te atiende desde el propio robot
+- **Avatar animado** — cara, ojos y lip-sync en el display del CoreS3
+- **Audio pulido** — soft-clip y de-esser para que la voz suene limpia
+- **Wake word** — activación por voz sin tocar nada
 
 ---
 
-## 🏗️ Arquitectura
+## Arquitectura
 
 ```
-┌─────────────────────────┐        ┌──────────────────────────────────────┐
-│  StackChan (ESP32-S3)   │        │  Tu servidor (Mac / Linux / PC)      │
-│  ┌───────────────────┐  │  WS    │  ┌────────────────────────────────┐  │
-│  │  Cara + lip-sync  │  │◄──────►│  │  hermes/ai-server (Node/tsx)   │  │
-│  │  Wake word        │  │ :8765  │  │  WebSocket + VAD + emociones   │  │
-│  │  Micrófono        │  │        │  └──┬───────────┬───────────┬─────┘  │
-│  └───────────────────┘  │        │     │           │           │        │
-│  App OpenClaw:          │        │  ┌──▼───┐  ┌────▼────┐  ┌──▼──────┐ │
-│  selector de agentes    │        │  │ STT  │  │  LLM    │  │  TTS    │ │
-└─────────────────────────┘        │  │whisper│  │OpenClaw │  │ Polly   │ │
-                                   │  │ :10302│  │         │  │ :18002  │ │
-                                   │  └──────┘  └─────────┘  └─────────┘ │
-                                   └──────────────────────────────────────┘
+┌─────────────────────────┐ ┌──────────────────────────────────────┐
+│ StackChan (ESP32-S3) │ │ Tu servidor (Mac / Linux / PC) │
+│ ┌───────────────────┐ │ WS │ ┌────────────────────────────────┐ │
+│ │ Cara + lip-sync │ │◄──────►│ │ hermes/ai-server (Node/tsx) │ │
+│ │ Wake word │ │ :8765 │ │ WebSocket + VAD + emociones │ │
+│ │ Micrófono │ │ │ └──┬───────────┬───────────┬─────┘ │
+│ └───────────────────┘ │ │ │ │ │ │
+│ App OpenClaw: │ │ ┌──▼───┐ ┌────▼────┐ ┌──▼──────┐ │
+│ selector de agentes │ │ │ STT │ │ LLM │ │ TTS │ │
+└─────────────────────────┘ │ │whisper│ │OpenClaw │ │ Polly │ │
+ │ │ :10302│ │ │ │ :18002 │ │
+ │ └──────┘ └─────────┘ └─────────┘ │
+ └──────────────────────────────────────┘
 ```
 
 - **STT** — whisper.cpp con modelo `ggml-large-v3-turbo`, idioma español
@@ -44,7 +44,7 @@ El robot graba tu voz, la envía por WebSocket a tu servidor, y el servidor hace
 
 ---
 
-## 📦 Contenido
+## Contenido
 
 | Ruta | Qué es |
 |---|---|
@@ -62,7 +62,7 @@ El robot graba tu voz, la envía por WebSocket a tu servidor, y el servidor hace
 
 ---
 
-## 🚀 Puesta en marcha
+## Puesta en marcha
 
 ### Requisitos
 
@@ -76,7 +76,7 @@ El robot graba tu voz, la envía por WebSocket a tu servidor, y el servidor hace
 ```bash
 cd hermes/ai-server
 npm install
-cp .env.example .env          # edita con tus credenciales
+cp .env.example .env # edita con tus credenciales
 ```
 
 Configura al menos estas variables en `.env`:
@@ -104,9 +104,9 @@ npx tsx src/index.ts
 Verificación rápida:
 
 ```bash
-lsof -iTCP:8765 -n -P | grep LISTEN    # ai-server
-lsof -iTCP:18002 -n -P | grep LISTEN   # tts bridge
-lsof -iTCP:10302 -n -P | grep LISTEN   # whisper
+lsof -iTCP:8765 -n -P | grep LISTEN # ai-server
+lsof -iTCP:18002 -n -P | grep LISTEN # tts bridge
+lsof -iTCP:10302 -n -P | grep LISTEN # whisper
 curl -s -X POST http://127.0.0.1:18002/ -d "Hola" -o /tmp/test.wav
 ```
 
@@ -114,7 +114,7 @@ curl -s -X POST http://127.0.0.1:18002/ -d "Hola" -o /tmp/test.wav
 
 ```bash
 cd firmware
-python3 ./fetch_repos.py        # descarga dependencias (mooncake, etc.)
+python3 ./fetch_repos.py # descarga dependencias (mooncake, etc.)
 idf.py set-target esp32s3
 idf.py build
 idf.py -p /dev/tty.usbmodem* flash
@@ -126,7 +126,7 @@ Antes de flashear, configura tus valores en:
 - `firmware/sdkconfig` → `CONFIG_OTA_URL` (opcional)
 - `firmware/main/hal/board/` → ajustes de tu placa
 
-> 💡 **Mapeo de agentes**: el firmware manda un token por agente; el servidor lo traduce a sesión de OpenClaw en `hermes/ai-server/src/device_config.ts` (`AGENT_TOKEN_MAP`). Pon los mismos tokens en ambos sitios.
+> **Mapeo de agentes**: el firmware manda un token por agente; el servidor lo traduce a sesión de OpenClaw en `hermes/ai-server/src/device_config.ts` (`AGENT_TOKEN_MAP`). Pon los mismos tokens en ambos sitios.
 
 ### Paso 3 — Conectar
 
@@ -137,7 +137,7 @@ Antes de flashear, configura tus valores en:
 
 ---
 
-## ⚙️ Variables de entorno (servidor)
+## Variables de entorno (servidor)
 
 | Variable | Descripción | Default |
 |---|---|---|
@@ -154,7 +154,7 @@ Antes de flashear, configura tus valores en:
 
 ---
 
-## 🛠️ Solución de problemas
+## Solución de problemas
 
 | Síntoma | Solución |
 |---|---|
@@ -166,7 +166,7 @@ Antes de flashear, configura tus valores en:
 
 ---
 
-## 🙏 Créditos y licencias
+## Créditos y licencias
 
 Este proyecto se apoya en trabajo ajeno con licencia MIT. **Obligatorio mantener los avisos de copyright** (ver `LICENSE-M5STACK.md` y `LICENSE-XIAOZHI.md`).
 
@@ -182,7 +182,7 @@ El servidor (`hermes/`) es código propio inspirado en la arquitectura de plaipi
 
 ---
 
-## 🔐 Notas de seguridad
+## Notas de seguridad
 
 - Este repo está **saneado**: no contiene credenciales reales ni datos personales
 - Las credenciales reales viven en `.env` (ignorado por git). **Nunca** subas tu `.env` a un repo público
@@ -190,13 +190,13 @@ El servidor (`hermes/`) es código propio inspirado en la arquitectura de plaipi
 
 ---
 
-## 📄 Licencia
+## Licencia
 
 MIT — ver `LICENSE-M5STACK.md` y `LICENSE-XIAOZHI.md` para los avisos de copyright de las bases. El código propio de este repo se distribuye bajo MIT, manteniendo los avisos de las licencias originales.
 
 ---
 
-# 🤖 StackChan + OpenClaw — Voice Desktop Robot
+# StackChan + OpenClaw — Voice Desktop Robot
 
 **Stackchan_Openclaw_App** is a complete project to turn a **StackChan** desktop robot (M5Stack CoreS3) into a smart voice assistant powered by **OpenClaw**.
 
@@ -206,33 +206,33 @@ The robot records your voice, streams it over WebSocket to your server, and the 
 
 ---
 
-## ✨ Features
+## Features
 
-- 🎙️ **Natural Spanish voice** — Amazon Polly neural (es-ES), streaming
-- 🧠 **OpenClaw brain** — real conversation, stable session per device
-- 👤 **On-screen agent selector** — pick who answers you right from the robot
-- 🎭 **Animated avatar** — face, eyes and lip-sync on the CoreS3 display
-- 🔊 **Polished audio** — soft-clip and de-esser for clean voice output
-- 🔌 **Wake word** — hands-free activation
+- **Natural Spanish voice** — Amazon Polly neural (es-ES), streaming
+- **OpenClaw brain** — real conversation, stable session per device
+- **On-screen agent selector** — pick who answers you right from the robot
+- **Animated avatar** — face, eyes and lip-sync on the CoreS3 display
+- **Polished audio** — soft-clip and de-esser for clean voice output
+- **Wake word** — hands-free activation
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 
 ```
-┌─────────────────────────┐        ┌──────────────────────────────────────┐
-│  StackChan (ESP32-S3)   │        │  Your server (Mac / Linux / PC)      │
-│  ┌───────────────────┐  │  WS    │  ┌────────────────────────────────┐  │
-│  │  Face + lip-sync  │  │◄──────►│  │  hermes/ai-server (Node/tsx)   │  │
-│  │  Wake word        │  │ :8765  │  │  WebSocket + VAD + emotions    │  │
-│  │  Microphone       │  │        │  └──┬───────────┬───────────┬─────┘  │
-│  └───────────────────┘  │        │     │           │           │        │
-│  OpenClaw app:           │        │  ┌──▼───┐  ┌────▼────┐  ┌──▼──────┐ │
-│  agent selector         │        │  │ STT  │  │  LLM    │  │  TTS    │ │
-└─────────────────────────┘        │  │whisper│  │OpenClaw │  │ Polly   │ │
-                                   │  │ :10302│  │         │  │ :18002  │ │
-                                   │  └──────┘  └─────────┘  └─────────┘ │
-                                   └──────────────────────────────────────┘
+┌─────────────────────────┐ ┌──────────────────────────────────────┐
+│ StackChan (ESP32-S3) │ │ Your server (Mac / Linux / PC) │
+│ ┌───────────────────┐ │ WS │ ┌────────────────────────────────┐ │
+│ │ Face + lip-sync │ │◄──────►│ │ hermes/ai-server (Node/tsx) │ │
+│ │ Wake word │ │ :8765 │ │ WebSocket + VAD + emotions │ │
+│ │ Microphone │ │ │ └──┬───────────┬───────────┬─────┘ │
+│ └───────────────────┘ │ │ │ │ │ │
+│ OpenClaw app: │ │ ┌──▼───┐ ┌────▼────┐ ┌──▼──────┐ │
+│ agent selector │ │ │ STT │ │ LLM │ │ TTS │ │
+└─────────────────────────┘ │ │whisper│ │OpenClaw │ │ Polly │ │
+ │ │ :10302│ │ │ │ :18002 │ │
+ │ └──────┘ └─────────┘ └─────────┘ │
+ └──────────────────────────────────────┘
 ```
 
 - **STT** — whisper.cpp with `ggml-large-v3-turbo`, Spanish language
@@ -242,7 +242,7 @@ The robot records your voice, streams it over WebSocket to your server, and the 
 
 ---
 
-## 📦 Repository layout
+## Repository layout
 
 | Path | What it is |
 |---|---|
@@ -260,7 +260,7 @@ The robot records your voice, streams it over WebSocket to your server, and the 
 
 ---
 
-## 🚀 Getting started
+## Getting started
 
 ### Prerequisites
 
@@ -274,7 +274,7 @@ The robot records your voice, streams it over WebSocket to your server, and the 
 ```bash
 cd hermes/ai-server
 npm install
-cp .env.example .env          # edit with your credentials
+cp .env.example .env # edit with your credentials
 ```
 
 At minimum, set these in `.env`:
@@ -302,9 +302,9 @@ npx tsx src/index.ts
 Quick verification:
 
 ```bash
-lsof -iTCP:8765 -n -P | grep LISTEN    # ai-server
-lsof -iTCP:18002 -n -P | grep LISTEN   # tts bridge
-lsof -iTCP:10302 -n -P | grep LISTEN   # whisper
+lsof -iTCP:8765 -n -P | grep LISTEN # ai-server
+lsof -iTCP:18002 -n -P | grep LISTEN # tts bridge
+lsof -iTCP:10302 -n -P | grep LISTEN # whisper
 curl -s -X POST http://127.0.0.1:18002/ -d "Hello" -o /tmp/test.wav
 ```
 
@@ -312,7 +312,7 @@ curl -s -X POST http://127.0.0.1:18002/ -d "Hello" -o /tmp/test.wav
 
 ```bash
 cd firmware
-python3 ./fetch_repos.py        # fetch dependencies (mooncake, etc.)
+python3 ./fetch_repos.py # fetch dependencies (mooncake, etc.)
 idf.py set-target esp32s3
 idf.py build
 idf.py -p /dev/tty.usbmodem* flash
@@ -324,7 +324,7 @@ Before flashing, configure your values in:
 - `firmware/sdkconfig` → `CONFIG_OTA_URL` (optional)
 - `firmware/main/hal/board/` → your board settings
 
-> 💡 **Agent mapping**: the firmware sends one token per agent; the server maps it to an OpenClaw session in `hermes/ai-server/src/device_config.ts` (`AGENT_TOKEN_MAP`). Use the same tokens on both sides.
+> **Agent mapping**: the firmware sends one token per agent; the server maps it to an OpenClaw session in `hermes/ai-server/src/device_config.ts` (`AGENT_TOKEN_MAP`). Use the same tokens on both sides.
 
 ### Step 3 — Connect
 
@@ -335,7 +335,7 @@ Before flashing, configure your values in:
 
 ---
 
-## ⚙️ Environment variables (server)
+## Environment variables (server)
 
 | Variable | Description | Default |
 |---|---|---|
@@ -352,7 +352,7 @@ Before flashing, configure your values in:
 
 ---
 
-## 🛠️ Troubleshooting
+## Troubleshooting
 
 | Symptom | Fix |
 |---|---|
@@ -364,7 +364,7 @@ Before flashing, configure your values in:
 
 ---
 
-## 🙏 Credits and licenses
+## Credits and licenses
 
 This project builds on third-party work under the MIT license. **You must keep the copyright notices** (see `LICENSE-M5STACK.md` and `LICENSE-XIAOZHI.md`).
 
@@ -380,7 +380,7 @@ The server (`hermes/`) is original code inspired by plaipin's architecture. The 
 
 ---
 
-## 🔐 Security notes
+## Security notes
 
 - This repo is **sanitized**: no real credentials or personal data
 - Real credentials live in `.env` (git-ignored). **Never** commit your `.env` to a public repo
@@ -388,6 +388,6 @@ The server (`hermes/`) is original code inspired by plaipin's architecture. The 
 
 ---
 
-## 📄 License
+## License
 
 MIT — see `LICENSE-M5STACK.md` and `LICENSE-XIAOZHI.md` for the base copyright notices. The original code in this repo is distributed under MIT, keeping the original license notices.
