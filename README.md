@@ -39,7 +39,7 @@ El robot graba tu voz, la envía por WebSocket a tu servidor, y el servidor hace
 
 - **STT** — whisper.cpp con modelo `ggml-large-v3-turbo`, idioma español
 - **LLM** — OpenClaw, streaming por tramos, sesión persistente por dispositivo
-- **TTS** — `tts_ha_bridge.py` llama a Amazon Polly directo (AWS REST SigV4), voz neural es-ES, salida ogg_vorbis 24 kHz
+- **TTS** — `tts_polly_bridge.py` llama a Amazon Polly directo (AWS REST SigV4), voz neural es-ES, salida ogg_vorbis 24 kHz
 - **Audio** — cadena de procesado: PCM → soft-clip → de-esser → WAV → Opus
 
 ---
@@ -51,7 +51,7 @@ El robot graba tu voz, la envía por WebSocket a tu servidor, y el servidor hace
 | `hermes/` | Servidor de voz completo (TypeScript + Python) |
 | `hermes/ai-server/` | Servidor principal: WebSocket, TTS streaming, STT, VAD, emociones |
 | `hermes/ai-server/src/` | Código fuente del servidor |
-| `hermes/ai-server/tts_ha_bridge.py` | Puente TTS → Amazon Polly directo (REST SigV4), puerto 18002 |
+| `hermes/ai-server/tts_polly_bridge.py` | Puente TTS → Amazon Polly directo (REST SigV4), puerto 18002 |
 | `hermes/ai-server/devices.json` | Enrutamiento de dispositivos → agente OpenClaw (ejemplo) |
 | `hermes/config-editor/` | Editor web de configuración del firmware |
 | `hermes/docs/` | Documentación y ADRs |
@@ -95,7 +95,7 @@ Arranca los tres servicios:
 whisper-server --model /ruta/ggml-large-v3-turbo.bin --host 0.0.0.0 --port 10302 --language es
 
 # 2. Voz (TTS) — puerto 18002
-python3 tts_ha_bridge.py
+python3 tts_polly_bridge.py
 
 # 3. Servidor principal — puerto 8765
 npx tsx src/index.ts
@@ -253,7 +253,7 @@ The robot records your voice, streams it over WebSocket to your server, and the 
 
 - **STT** — whisper.cpp with `ggml-large-v3-turbo`, Spanish language
 - **LLM** — OpenClaw, chunked streaming, persistent session per device
-- **TTS** — `tts_ha_bridge.py` calls Amazon Polly directly (AWS REST SigV4), es-ES neural voice, ogg_vorbis 24 kHz output
+- **TTS** — `tts_polly_bridge.py` calls Amazon Polly directly (AWS REST SigV4), es-ES neural voice, ogg_vorbis 24 kHz output
 - **Audio** — processing chain: PCM → soft-clip → de-esser → WAV → Opus
 
 ---
@@ -265,7 +265,7 @@ The robot records your voice, streams it over WebSocket to your server, and the 
 | `hermes/` | Complete voice server (TypeScript + Python) |
 | `hermes/ai-server/` | Main server: WebSocket, TTS streaming, STT, VAD, emotions |
 | `hermes/ai-server/src/` | Server source code |
-| `hermes/ai-server/tts_ha_bridge.py` | TTS bridge → Amazon Polly direct (REST SigV4), port 18002 |
+| `hermes/ai-server/tts_polly_bridge.py` | TTS bridge → Amazon Polly direct (REST SigV4), port 18002 |
 | `hermes/ai-server/devices.json` | Device → OpenClaw agent routing (example) |
 | `hermes/config-editor/` | Web-based firmware config editor |
 | `hermes/docs/` | Documentation and ADRs |
@@ -309,7 +309,7 @@ Start the three services:
 whisper-server --model /path/ggml-large-v3-turbo.bin --host 0.0.0.0 --port 10302 --language es
 
 # 2. Text-to-speech (TTS) — port 18002
-python3 tts_ha_bridge.py
+python3 tts_polly_bridge.py
 
 # 3. Main server — port 8765
 npx tsx src/index.ts

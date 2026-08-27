@@ -12,7 +12,7 @@ con 4 subframes (TOC 0xdb / framecode 3) que el decodificador ESP32 reproduce li
 
 ## ⚠️ IMPORTANTE: StackChan NO usa Kokoro
 
-El TTS del robot es **Amazon Polly** (vía `tts_ha_bridge.py`, puerto 18002).
+El TTS del robot es **Amazon Polly** (vía `tts_polly_bridge.py`, puerto 18002).
 Kokoro es SOLO para los audios de Telegram de StackChan.
 
 **Historia (por qué existe este venv):** el 25/08/2026 se metió opuslib_next dentro
