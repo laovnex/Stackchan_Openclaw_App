@@ -1,0 +1,13 @@
+# Dependencias y build
+node_modules/
+dist/
+__pycache__/
+*.pyc
+
+# Secretos (NUNCA subir el .env real)
+.env
+.env.*
+
+# Basura
+.DS_Store
+*.log

@@ -1,0 +1,57 @@
+/**
+ * @file animate.cpp
+ * @author Forairaaaaa
+ * @brief
+ * @version 0.1
+ * @date 2025-01-08
+ *
+ * @copyright Copyright (c) 2025
+ *
+ */
+#include "../utils/raylib_wrapper.hpp"
+#include <smooth_ui_toolkit.hpp>
+#include <uitk/short_namespace.hpp>
+#include <mooncake_log.h>
+
+using namespace uitk;
+
+int main()
+{
+    Animate animation;
+
+    // Animation options
+    // Refs: https://motion.dev/docs/animate#options
+    animation.start = 200;
+    animation.end = 600;
+    animation.repeat = -1;
+    animation.repeatType = AnimateRepeatType::Reverse;
+
+    animation.springOptions().bounce = 0.4;
+    animation.springOptions().visualDuration = 0.6;
+
+    // animation.easingOptions().duration = 0.6;
+    // animation.easingOptions().easingFunction = ease::ease_out_back;
+
+    // Callbacks
+    animation.onUpdate([&](const float& value) {
+        mclog::info("{}", value);
+    });
+    animation.onComplete([&]() {
+        mclog::info("done");
+    });
+
+    // Init and play
+    animation.init();
+    animation.play();
+
+    raylib::create_window(800, 450, "你好", [&]() {
+        // Update animation
+        animation.update();
+
+        // Render
+        ClearBackground(BLACK);
+        DrawCircle(animation.value(), 225, 30, LIGHTGRAY);
+    });
+
+    return 0;
+}
