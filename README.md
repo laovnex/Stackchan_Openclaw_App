@@ -170,7 +170,7 @@ Antes de flashear, configura tus valores en:
 
 ## Créditos y licencias
 
-Este proyecto se apoya en trabajo ajeno con licencia MIT. **Obligatorio mantener los avisos de copyright** (ver `LICENSE-M5STACK.md` y `LICENSE-XIAOZHI.md`).
+Este proyecto se apoya en trabajo ajeno con licencia MIT (ver `LICENSE-M5STACK.md` y `LICENSE-XIAOZHI.md`).
 
 | Proyecto | Uso | Licencia |
 |---|---|---|
@@ -362,7 +362,7 @@ Before flashing, configure your values in:
 
 ## Credits and licenses
 
-This project builds on third-party work under the MIT license. **You must keep the copyright notices** (see `LICENSE-M5STACK.md` and `LICENSE-XIAOZHI.md`).
+This project builds on third-party work under the MIT license (see `LICENSE-M5STACK.md` and `LICENSE-XIAOZHI.md`).
 
 | Project | Used for | License |
 |---|---|---|
