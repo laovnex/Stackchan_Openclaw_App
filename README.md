@@ -184,14 +184,6 @@ El servidor (`hermes/`) es código propio inspirado en la arquitectura de plaipi
 
 ---
 
-## Notas de seguridad
-
-- Este repo está **saneado**: no contiene credenciales reales ni datos personales
-- Las credenciales reales viven en `.env` (ignorado por git). **Nunca** subas tu `.env` a un repo público
-- Si haces un fork, revisa también tus propios secretos antes de publicar
-
----
-
 ## Licencia
 
 MIT — ver `LICENSE-M5STACK.md` y `LICENSE-XIAOZHI.md` para los avisos de copyright de las bases. El código propio de este repo se distribuye bajo MIT, manteniendo los avisos de las licencias originales.
@@ -381,14 +373,6 @@ This project builds on third-party work under the MIT license. **You must keep t
 | [waynecc-at/robot-bridge](https://github.com/waynecc-at/robot-bridge) | Server reference (LED state, Opus) | — |
 
 The server (`hermes/`) is original code inspired by plaipin's architecture. The firmware is a fork of xiaozhi-esp32 with the OpenClaw app and StackChan board support added.
-
----
-
-## Security notes
-
-- This repo is **sanitized**: no real credentials or personal data
-- Real credentials live in `.env` (git-ignored). **Never** commit your `.env` to a public repo
-- If you fork this, review your own secrets before publishing
 
 ---
 
