@@ -4,7 +4,7 @@
 
 El robot graba tu voz, la envía por WebSocket a tu servidor, y el servidor hace todo el trabajo: transcribe (whisper.cpp), piensa (OpenClaw) y habla de vuelta con una voz neural en español (Amazon Polly es-ES). El ESP32 es solo un terminal de audio con cara: la inteligencia vive en tu máquina.
 
-> **¿Qué incluye este repo?** Las dos mitades del proyecto: el **servidor de voz** (`hermes/`) y el **firmware del robot** (`firmware/`). Todo está saneado: sin credenciales reales, sin tokens, sin datos personales. Copia `.env.example` a `.env` y configura tus propias claves.
+> **¿Qué incluye este repo?** Las dos mitades del proyecto: el **servidor de voz** (`hermes/`) y el **firmware del robot** (`firmware/`).
 
 ---
 
@@ -204,7 +204,7 @@ MIT — ver `LICENSE-M5STACK.md` y `LICENSE-XIAOZHI.md` para los avisos de copyr
 
 The robot records your voice, streams it over WebSocket to your server, and the server does all the heavy lifting: speech-to-text (whisper.cpp), thinking (OpenClaw), and text-to-speech with a natural Spanish neural voice (Amazon Polly es-ES). The ESP32 is just an audio terminal with a face — the intelligence lives on your machine.
 
-> **What's in this repo?** Both halves of the project: the **voice server** (`hermes/`) and the **robot firmware** (`firmware/`). Everything is sanitized: no real credentials, no tokens, no personal data. Copy `.env.example` to `.env` and configure your own keys.
+> **What's in this repo?** Both halves of the project: the **voice server** (`hermes/`) and the **robot firmware** (`firmware/`).
 
 ---
 
