@@ -156,6 +156,28 @@ Antes de flashear, configura tus valores en:
 
 ---
 
+## Tracker de emociones
+
+El servidor analiza el texto que va a decir el robot y decide qué emoción pondrá en la cara del StackChan.
+
+**Emociones soportadas:** neutral, feliz, risa, enfadado, triste, llorando, somnoliento y dudoso.
+
+**Cómo decide la emoción** (todo en `hermes/ai-server/src/session.ts`):
+
+- **Diccionario de palabras** (`EMOTION_WORDS`): cada emoción tiene una lista de palabras y expresiones en español. El texto de cada respuesta se compara con ese diccionario.
+- **Señal fuerte vs señal suave**: hay un subconjunto de alta carga (`STRONG_EMOTION_WORDS`) con las expresiones más intensas (risas, "te quiero mucho", enfados fuertes, "me muero de sueño"...). Si aparece una señal fuerte, la cara cambia al momento.
+- **Memoria e inercia**: la cara mantiene la emoción actual mientras no haya señal fuerte. Una señal suave solo cambia la cara si es consistente (aparece en 2 de las últimas 3 frases), para evitar saltos tontos. Una frase neutra no resetea: la cara se queda como está.
+- **Orden de prioridad**: risa, llanto, feliz, triste, enfado, sueño, duda. Si hay empate, manda la primera de la lista.
+- **Expresiones de amor**: "te quiero", "te amo", "me encantas", "te echo de menos"... disparan el corazón en la carita.
+
+**Cómo tunear las emociones** (añadir tus propias palabras):
+
+1. Abre `hermes/ai-server/src/session.ts`.
+2. En `EMOTION_WORDS` (diccionario completo) o en `STRONG_EMOTION_WORDS` (señales fuertes), añade tus palabras o expresiones a la lista de la emoción que quieras reforzar. Respeta el formato de comas y comillas.
+3. Reinicia el servidor (`npx tsx src/index.ts`). No hace falta recompilar ni tocar el firmware.
+
+Nota: los emojis en el texto también cuentan como señal, porque están incluidos en el diccionario. Si prefieres que la cara no reaccione a emojis, puedes quitarlos de las listas.
+
 ## Solución de problemas
 
 | Síntoma | Solución |
@@ -347,6 +369,28 @@ Before flashing, configure your values in:
 | `STACKCHAN_OPUS_PYTHON_BIN` | Python of the venv with `opuslib_next` | — |
 
 ---
+
+## Emotion tracker
+
+The server analyzes the text the robot is about to speak and decides which emotion to show on the StackChan face.
+
+**Supported emotions:** neutral, happy, laughing, angry, sad, crying, sleepy and doubtful.
+
+**How the emotion is decided** (all in `hermes/ai-server/src/session.ts`):
+
+- **Word dictionary** (`EMOTION_WORDS`): each emotion has a list of Spanish words and expressions. The text of every reply is matched against that dictionary.
+- **Strong vs soft signal**: there is a high-impact subset (`STRONG_EMOTION_WORDS`) with the most intense expressions (laughs, "te quiero mucho", strong anger, "me muero de sueño"...). If a strong signal appears, the face changes instantly.
+- **Memory and inertia**: the face keeps its current emotion while there is no strong signal. A soft signal only changes the face if it is consistent (appears in 2 of the last 3 phrases), to avoid jumpy behavior. A neutral phrase does not reset: the face stays as it is.
+- **Priority order**: laughing, crying, happy, sad, angry, sleepy, doubtful. On ties, the first one in the list wins.
+- **Love expressions**: "te quiero", "te amo", "me encantas", "te echo de menos"... trigger the heart on the face.
+
+**How to tune the emotions** (add your own words):
+
+1. Open `hermes/ai-server/src/session.ts`.
+2. In `EMOTION_WORDS` (full dictionary) or `STRONG_EMOTION_WORDS` (strong signals), add your words or expressions to the list of the emotion you want to reinforce. Keep the comma and quote format.
+3. Restart the server (`npx tsx src/index.ts`). No recompilation and no firmware changes needed.
+
+Note: emojis in text also count as signals, because they are included in the dictionary. If you prefer the face not to react to emojis, you can remove them from the lists.
 
 ## Troubleshooting
 
