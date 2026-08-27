@@ -123,8 +123,10 @@ idf.py -p /dev/tty.usbmodem* flash
 Antes de flashear, configura tus valores en:
 
 - `firmware/main/apps/app_openclaw/app_openclaw.cpp` → `kGatewayUrl` con la IP de tu servidor (`ws://<tu-ip>:8765/`) y los tokens de agente que definas
-- `firmware/sdkconfig` → `CONFIG_OTA_URL` (opcional)
+- `firmware/sdkconfig` → `CONFIG_OTA_URL` (no toques; ver nota de OTA abajo)
 - `firmware/main/hal/board/` → ajustes de tu placa
+
+> **IMPORTANTE — OTA desactivado**: este firmware es un fork con la app OpenClaw añadida. El OTA del proyecto original (xiaozhi-esp32) está **desactivado a propósito** (`CONFIG_OTA_URL` apunta a un sitio muerto en `sdkconfig.defaults`): si lo reactivas, el OTA original sobrescribiría el firmware y **perderías la app OpenClaw y el soporte de placa StackChan**. Las actualizaciones se hacen flasheando por USB (`idf.py flash`), no por OTA.
 
 > **Mapeo de agentes**: el firmware manda un token por agente; el servidor lo traduce a sesión de OpenClaw en `hermes/ai-server/src/device_config.ts` (`AGENT_TOKEN_MAP`). Pon los mismos tokens en ambos sitios.
 
@@ -321,8 +323,10 @@ idf.py -p /dev/tty.usbmodem* flash
 Before flashing, configure your values in:
 
 - `firmware/main/apps/app_openclaw/app_openclaw.cpp` → `kGatewayUrl` with your server IP (`ws://<your-ip>:8765/`) and the agent tokens you define
-- `firmware/sdkconfig` → `CONFIG_OTA_URL` (optional)
+- `firmware/sdkconfig` → `CONFIG_OTA_URL` (do not touch; see OTA note below)
 - `firmware/main/hal/board/` → your board settings
+
+> **IMPORTANT — OTA disabled**: this firmware is a fork with the OpenClaw app added. The OTA of the original project (xiaozhi-esp32) is **intentionally disabled** (`CONFIG_OTA_URL` points to a dead site in `sdkconfig.defaults`): if you re-enable it, the original OTA would overwrite the firmware and **you would lose the OpenClaw app and the StackChan board support**. Updates are done by flashing over USB (`idf.py flash`), not via OTA.
 
 > **Agent mapping**: the firmware sends one token per agent; the server maps it to an OpenClaw session in `hermes/ai-server/src/device_config.ts` (`AGENT_TOKEN_MAP`). Use the same tokens on both sides.
 
