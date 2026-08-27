@@ -1,0 +1,71 @@
+import http from 'http'
+import { WebSocket, WebSocketServer } from 'ws'
+import { Session } from './session.js'
+import { serveMediaRequest, setObservedMediaBaseUrl } from './media.js'
+import { getDeviceBinding, getAgentBindingFromToken, type DeviceBinding } from './device_config.js'
+
+const DEVICE_KEEPALIVE_INTERVAL_MS = Math.max(1000, Number(process.env.STACKCHAN_WS_KEEPALIVE_MS ?? '3000') || 3000)
+
+export function startServer(port: number): void {
+    const server = http.createServer((req, res) => {
+        if (serveMediaRequest(req, res)) return
+        res.writeHead(404, { 'content-type': 'text/plain; charset=utf-8' })
+        res.end('not found')
+    })
+    // StackChan: aceptar cualquier path (el firmware xiaozhi conecta a ws://host:8765/ sin /ws).
+    const wss = new WebSocketServer({ server })
+
+    // Default 0.0.0.0 so ESP32 devices on WiFi can reach the server.
+    // Set STACKCHAN_WS_HOST=127.0.0.1 for local-only/testing if no hardware is connected.
+    const host = process.env.STACKCHAN_WS_HOST ?? '0.0.0.0'
+
+    server.on('listening', () => {
+        console.log(`[server] WebSocket server listening on ws://${host}:${port}/ws`)
+        console.log(`[server] Media server listening on http://${host}:${port}/media/...`)
+    })
+
+    wss.on('connection', (ws: WebSocket, req) => {
+        const ip = req.socket.remoteAddress ?? 'unknown'
+        if (req.headers.host) {
+            setObservedMediaBaseUrl(`http://${req.headers.host}`)
+        }
+        // Read Device-Id from WS handshake headers (firmware sends MAC address)
+        const rawDeviceId = req.headers['device-id'] as string | undefined
+        // Normalize: firmware sends compact uppercase (68EE8FD74CD0), devices.json may use colons
+        const deviceId = rawDeviceId?.replace(/[:\-]/g, '').toUpperCase()
+        let binding: DeviceBinding = getDeviceBinding(deviceId)
+        // Agent override: firmware sends the selected agent token in Authorization: Bearer <token>
+        const authHeader = req.headers['authorization'] as string | undefined
+        const agentBinding = authHeader ? getAgentBindingFromToken(authHeader.replace(/^Bearer\s+/i, '').trim()) : undefined
+        if (agentBinding) {
+            binding = { ...binding, ...agentBinding }
+        }
+        console.log(`[server] connected: ${ip} device=${deviceId ?? 'unknown'} backend=${binding.backend} agent=${binding.agent_id}`)
+
+        const session = new Session(ws, { deviceBinding: binding, deviceId })
+        const keepaliveTimer = setInterval(() => {
+            if (ws.readyState !== WebSocket.OPEN) return
+            try {
+                ws.ping()
+            } catch {
+                // The close handler will clean up the session.
+            }
+        }, DEVICE_KEEPALIVE_INTERVAL_MS)
+
+        ws.on('message', (data: Buffer | string) => {
+            session.handleMessage(data)
+        })
+
+        ws.on('close', () => {
+            clearInterval(keepaliveTimer)
+            console.log(`[server] disconnected: ${ip}`)
+            session.close()
+        })
+
+        ws.on('error', (err) => {
+            console.error(`[server] error from ${ip}:`, err.message)
+        })
+    })
+
+    server.listen(port, host)
+}

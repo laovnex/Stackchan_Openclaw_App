@@ -1,0 +1,65 @@
+# Build artifacts
+build/
+sdkconfig
+sdkconfig.old
+managed_components/
+dependencies.lock
+
+# Environment
+.env
+*.env.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Firmware binaries
+*.bin
+*.elf
+*.hex
+*.map
+
+# Audio/media
+*.mp3
+*.wav
+*.avi
+*.mp4
+
+# Claude/agent notes
+.claude/
+
+# Large model files (keep out of git)
+*.wn9
+*.wav2vec
+*.model
+# Reference repos (cloned, not our code)
+firmware/
+repos/
+
+# Archive build artifacts (contain personal paths)
+archive/*/build/
+archive/*/managed_components/
+archive/*/sdkconfig
+archive/*/dependencies.lock
+
+# Backups
+backups/
+backups-v*
+*.bak*
+
+# Dependencias y compilados (nunca al repo)
+node_modules/
+dist/
+__pycache__/
+*.pyc
+
+# Firmware binario
+*.zip
+
+# Env (real y backups)
+.env
+.env.bak*
+

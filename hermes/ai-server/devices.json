@@ -1,0 +1,13 @@
+{
+  "default": {
+    "backend": "openclaw",
+    "agent_id": "agent-main"
+  },
+  "devices": {
+    "68:EE:8F:D7:4C:D0": {
+      "backend": "openclaw",
+      "agent_id": "agent-main",
+      "label": "StackChan de mesa (StackChan CoreS3)"
+    }
+  }
+}
